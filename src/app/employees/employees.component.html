@@ -1,0 +1,210 @@
+<table class="w-full border-collapse rounded-2xl overflow-hidden shadow-lg">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        <div class="flex items-center justify-between">
+          <span>Name</span>
+          <div class="flex items-center gap-2">
+            <button
+              class="text-xs px-2 py-1 border rounded hover:bg-gray-200"
+              routerLink="."
+              [queryParams]="{
+                sortBy: 'name',
+                sortDirection: sortDirection() === 'asc' ? 'desc' : 'asc',
+              }"
+            >
+              {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+            </button>
+            <input
+              [(ngModel)]="name"
+              type="text"
+              placeholder="Search..."
+              class="text-xs px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-24"
+            />
+          </div>
+        </div>
+      </th>
+
+      <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        <div class="flex items-center justify-between">
+          <span>Department</span>
+          <div class="flex items-center gap-2">
+            <button
+              class="text-xs px-2 py-1 border rounded hover:bg-gray-200"
+              routerLink="."
+              [queryParams]="{
+                sortBy: 'department',
+                sortDirection: sortDirection() === 'asc' ? 'desc' : 'asc',
+              }"
+            >
+              {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+            </button>
+            <input
+              [(ngModel)]="department"
+              type="text"
+              placeholder="Search..."
+              class="text-xs px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-24"
+            />
+          </div>
+        </div>
+      </th>
+
+      <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        <div class="flex items-center justify-between">
+          <span>Status</span>
+        </div>
+      </th>
+
+      <!-- Actions Header -->
+      <th class="text-right px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        Actions
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (
+      employee of filteredEmployees().slice(
+        pageIndex() * pageSize(),
+        (pageIndex() + 1) * pageSize()
+      );
+      track employee.id
+    ) {
+      <tr
+        class="transition-colors duration-200 hover:bg-gray-50"
+        [class]="employee.status === 'active' ? 'active' : 'inactive'"
+      >
+        <td class="px-6 py-4 text-sm text-gray-600 border-t">
+          {{ employee.name }}
+        </td>
+
+        <td class="px-6 py-4 text-sm text-gray-600 border-t">
+          {{ employee.department }}
+        </td>
+
+        <td class="px-6 py-4 text-sm border-t">
+          <span
+            class="active px-2 py-1 rounded-lg text-xs font-medium"
+            [class]="employee.status === 'active' ? 'active' : 'inactive'"
+          >
+            {{ employee.status }}
+          </span>
+        </td>
+
+        <!-- Actions Buttons -->
+        <td class="px-6 py-4 border-t text-right">
+          <div class="flex items-center justify-end gap-2">
+            <!-- Expand Button -->
+            <button
+              type="button"
+              class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition"
+              title="Expand"
+              (click)="employee.expanded = !employee.expanded"
+            >
+              <!-- Expand Icon -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="employee.expanded ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'"
+                />
+              </svg>
+            </button>
+            <!-- Edit Button -->
+            <button
+              routerLink="/employees/edit/{{ employee.id }}"
+              class="p-2 rounded-lg hover:bg-blue-100 text-blue-600 transition"
+              title="Edit"
+            >
+              <!-- Pencil Icon -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5h2m-1-1v2m-6 12h12a2 2 0 002-2V9.828a2 2 0 00-.586-1.414l-3.828-3.828A2 2 0 0014.172 4H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              (click)="onDelete(employee.id)"
+              class="p-2 rounded-lg hover:bg-red-100 text-red-600 transition"
+              title="Delete"
+            >
+              <!-- Trash Icon -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 7h12M9 7v10m6-10v10M5 7l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 11v6m4-6v6M9 4h6a1 1 0 011 1v2H8V5a1 1 0 011-1z"
+                />
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- Expanded Details Row -->
+      <tr class="bg-gray-50" [style]="employee.expanded ? 'display: table-row' : 'display: none'">
+        <td colspan="4" class="px-6 py-4 border-t">
+          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+            <div>
+              <span class="font-semibold">Employee ID: </span>
+              <span>{{ employee.id }}</span>
+            </div>
+            <div>
+              <span class="font-semibold">Name: </span>
+              <span>{{ employee.name }}</span>
+            </div>
+
+            <div>
+              <span class="font-semibold">Department: </span>
+              <span>{{ employee.department }}</span>
+            </div>
+
+            <div>
+              <span class="font-semibold">Start Date: </span>
+              <span>{{ employee.startDate | date: 'MM/dd/yyyy' }}</span>
+            </div>
+
+            <div>
+              <span class="font-semibold">Status: </span>
+              <span>{{ employee.status }}</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="flex items-center justify-center gap-2 mt-6">
+  <mat-paginator
+    [length]="filteredEmployees().length"
+    [pageSize]="pageSize()"
+    (page)="changePage($event)"
+  ></mat-paginator>
+</div>

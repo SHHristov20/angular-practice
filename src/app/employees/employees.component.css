@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+tr:hover {
+  @apply bg-gray-50;
+}
+
+.active {
+  @apply text-green-700 bg-green-200 px-2 py-1 rounded-lg font-medium;
+}
+
+.inactive {
+  @apply text-red-700 bg-red-200 px-2 py-1 rounded-lg font-medium;
+}
