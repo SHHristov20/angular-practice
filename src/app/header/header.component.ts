@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PrimaryButtonDirective } from "../shared/directives/button/primary-button.directive";
+import { PrimaryButtonDirective } from '../shared/directives/button/primary-button.directive';
 
 @Component({
   selector: 'app-header',

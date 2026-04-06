@@ -28,9 +28,12 @@ import { SecondaryButtonDirective } from '../../shared/directives/button/seconda
 })
 export class NewEmployee implements OnInit {
   form = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    department: new FormControl('', [Validators.required]),
-    startDate: new FormControl(new Date(), [Validators.required]),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    department: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    startDate: new FormControl(new Date(), {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     status: new FormControl(true),
   });
   employeeService = inject(EmployeeService);
@@ -41,22 +44,7 @@ export class NewEmployee implements OnInit {
   private employeeId: number | null = null;
 
   ngOnInit(): void {
-    if (this.route.snapshot.paramMap.get('id')) {
-      this.editMode = true;
-      this.employeeId = Number(this.route.snapshot.paramMap.get('id'));
-    }
-
-    if (this.employeeId !== null) {
-      const employee = this.employeeService.getEmployeeById(this.employeeId);
-      if (employee) {
-        this.form.setValue({
-          name: employee.name,
-          department: employee.department,
-          startDate: employee.startDate,
-          status: employee.status === 'active',
-        });
-      }
-    }
+    this.loadEmployeeIfEditing();
   }
 
   onSubmit() {
@@ -64,23 +52,27 @@ export class NewEmployee implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+
+    const value = this.form.getRawValue();
+
     if (this.editMode && this.employeeId) {
+
       const updatedEmployee: NewEmployeeDto = {
-        name: this.form.value.name!,
-        department: this.form.value.department!,
-        startDate: this.form.value.startDate!,
-        status: this.form.value.status! ? 'active' : 'inactive',
+        name: value.name,
+        department: value.department,
+        startDate: value.startDate,
+        status: value.status ? 'active' : 'inactive',
       };
+
       this.employeeService.editEmployee(this.employeeId, updatedEmployee);
       this.router.navigate(['/employees']);
-      return;
     }
 
     const newEmployee: NewEmployeeDto = {
-      name: this.form.value.name!,
-      department: this.form.value.department!,
-      startDate: this.form.value.startDate!,
-      status: this.form.value.status! ? 'active' : 'inactive',
+      name: value.name,
+      department: value.department,
+      startDate: value.startDate,
+      status: value.status ? 'active' : 'inactive',
     };
     this.employeeService.addEmployee(newEmployee);
     this.form.reset();
@@ -96,6 +88,26 @@ export class NewEmployee implements OnInit {
 
       this.form.reset();
       this.router.navigate(['/employees']);
+    });
+  }
+
+  private loadEmployeeIfEditing(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
+
+    const employeeId = Number(id);
+    const employee = this.employeeService.getEmployeeById(employeeId);
+
+    if (!employee) return;
+
+    this.editMode = true;
+    this.employeeId = employeeId;
+
+    this.form.setValue({
+      name: employee.name,
+      department: employee.department,
+      startDate: employee.startDate,
+      status: employee.status === 'active',
     });
   }
 }
