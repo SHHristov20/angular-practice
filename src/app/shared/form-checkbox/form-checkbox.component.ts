@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./form-checkbox.component.css'],
   imports: [MatCheckboxModule, ReactiveFormsModule],
 })
-export class FormCheckboxComponent{
+export class FormCheckboxComponent {
   title = input.required<string>();
   control = input.required<FormControl>();
 }

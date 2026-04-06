@@ -9,6 +9,8 @@ import { DialogService } from '../../shared/confirm-dialog/dialog.service';
 import { FormInputComponent } from '../../shared/form-input/form-input.component';
 import { FormDatepickerComponent } from '../../shared/form-datepicker/form-datepicker.component';
 import { FormCheckboxComponent } from '../../shared/form-checkbox/form-checkbox.component';
+import { PrimaryButtonDirective } from '../../shared/directives/button/primary-button.directive';
+import { SecondaryButtonDirective } from '../../shared/directives/button/secondary-button.directive';
 
 @Component({
   selector: 'app-new-employee',
@@ -18,6 +20,8 @@ import { FormCheckboxComponent } from '../../shared/form-checkbox/form-checkbox.
     FormInputComponent,
     FormDatepickerComponent,
     FormCheckboxComponent,
+    PrimaryButtonDirective,
+    SecondaryButtonDirective,
   ],
   templateUrl: './new-employee.html',
   styleUrl: './new-employee.css',
