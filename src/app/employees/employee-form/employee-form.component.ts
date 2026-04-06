@@ -23,10 +23,10 @@ import { SecondaryButtonDirective } from '../../shared/directives/button/seconda
     PrimaryButtonDirective,
     SecondaryButtonDirective,
   ],
-  templateUrl: './new-employee.html',
-  styleUrl: './new-employee.css',
+  templateUrl: './employee-form.component.html',
+  styleUrl: './employee-form.component.css',
 })
-export class NewEmployee implements OnInit {
+export class EmployeeFormComponent implements OnInit {
   form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', {
@@ -41,7 +41,7 @@ export class NewEmployee implements OnInit {
     }),
     salary: new FormControl(0, {
       nonNullable: true,
-      validators: [Validators.required, Validators.min(0)],
+      validators: [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)],
     }),
     status: new FormControl(true),
   });

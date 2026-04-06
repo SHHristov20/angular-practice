@@ -1,0 +1,35 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6"
+>
+  <app-form-input
+    [label]="'Name'"
+    [control]="form.controls['name']"
+    [errorMessage]="'Name is required'"
+  />
+
+  <app-form-textarea
+    [label]="'Description'"
+    [control]="form.controls['description']"
+    [errorMessage]="'Description is required'"
+  />
+
+  <app-form-input
+    [label]="'Location'"
+    [control]="form.controls['location']"
+    [errorMessage]="'Location is required'"
+  />
+
+  <app-form-input
+    [label]="'Budget'"
+    [control]="form.controls['budget']"
+    [errorMessage]="'Budget is required'"
+  />
+
+  <!-- Buttons -->
+  <div class="flex justify-end gap-3 pt-2">
+    <button type="button" appSecondaryButton (click)="onCancel()">Cancel</button>
+    <button type="submit" appPrimaryButton [disabled]="form.invalid">Submit</button>
+  </div>
+</form>

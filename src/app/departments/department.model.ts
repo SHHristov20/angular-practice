@@ -13,6 +13,7 @@ export type NewDepartmentDto = {
   description: string;
   location: string;
   budget: number;
+  createdAt: Date;
 };
 
 export const mockDepartments: Department[] = [
