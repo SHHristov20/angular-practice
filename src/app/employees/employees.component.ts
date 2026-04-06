@@ -9,10 +9,11 @@ import { DatePipe } from '@angular/common';
 import { DialogService } from '../shared/confirm-dialog/dialog.service';
 import { TableHeaderComponent } from "../shared/table-header/table-header.component";
 import { OnInit } from '@angular/core';
+import { DetailsRowComponent } from "../shared/details-row/details-row.component";
 
 @Component({
   selector: 'app-employees',
-  imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe, TableHeaderComponent],
+  imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe, TableHeaderComponent, DetailsRowComponent],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
 })

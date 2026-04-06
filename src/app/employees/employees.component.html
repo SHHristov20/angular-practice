@@ -141,33 +141,15 @@
 
       <!-- Expanded Details Row -->
       <tr class="bg-gray-50" [style]="employee.expanded ? 'display: table-row' : 'display: none'">
-        <td colspan="4" class="px-6 py-4 border-t">
-          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
-            <div>
-              <span class="font-semibold">Employee ID: </span>
-              <span>{{ employee.id }}</span>
-            </div>
-            <div>
-              <span class="font-semibold">Name: </span>
-              <span>{{ employee.name }}</span>
-            </div>
-
-            <div>
-              <span class="font-semibold">Department: </span>
-              <span>{{ employee.department }}</span>
-            </div>
-
-            <div>
-              <span class="font-semibold">Start Date: </span>
-              <span>{{ employee.startDate | date: 'MM/dd/yyyy' }}</span>
-            </div>
-
-            <div>
-              <span class="font-semibold">Status: </span>
-              <span>{{ employee.status }}</span>
-            </div>
-          </div>
-        </td>
+        <app-details-row
+          [details]="[
+            { label: 'Employee ID', value: employee.id.toString() },
+            { label: 'Name', value: employee.name },
+            { label: 'Department', value: employee.department },
+            { label: 'Start Date', value: (employee.startDate | date: 'MM/dd/yyyy') || 'N/A' },
+            { label: 'Status', value: employee.status }
+          ]"
+        />
       </tr>
     }
   </tbody>
