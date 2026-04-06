@@ -5,8 +5,7 @@ import { ViewEncapsulation } from '@angular/core';
   selector: 'app-details-row',
   templateUrl: './details-row.component.html',
   styleUrls: ['./details-row.component.css'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class DetailsRowComponent {
-  details = input.required<{ label: string, value: string }[]>();
+  details = input.required<{ label: string; value: string }[]>();
 }

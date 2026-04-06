@@ -9,11 +9,6 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 
-export interface ConfirmDialogData {
-  title: string;
-  message: string;
-}
-
 @Component({
   selector: 'app-confirm-dialog',
   imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
@@ -21,7 +16,7 @@ export interface ConfirmDialogData {
   styleUrl: './confirm-dialog.css',
 })
 export class ConfirmDialogComponent {
-  data: ConfirmDialogData = inject(MAT_DIALOG_DATA);
+  data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<ConfirmDialogComponent>);
 
   confirm() {

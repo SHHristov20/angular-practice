@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Employee, mockEmployees, NewEmployeeDto } from './employee.model';
+import { Employee, generateEmployees, NewEmployeeDto } from './employee.model';
+import { formatDate } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
-  private readonly _employees: Employee[] = mockEmployees;
+  private readonly _employees: Employee[];
 
-  constructor() {}
+  constructor() {
+    this._employees = generateEmployees(100);
+  }
 
   get employees(): Employee[] {
     return this._employees;
@@ -64,10 +67,18 @@ export class EmployeeService {
   }
 
   filterEmployees(filter: { property: keyof Employee; value: string }): Employee[] {
-    console.log(filter)
     return this.employees.filter((employee) => {
       const employeeValue = String(employee[filter.property]).toLowerCase();
       return employeeValue.includes(filter.value.toLowerCase());
     });
+  }
+
+  getDetails(employee: any) {
+    const { expanded, ...rest } = employee;
+
+    return Object.entries(rest).map(([key, value]) => ({
+      label: key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()),
+      value: value instanceof Date ? formatDate(value, 'MM/dd/yyyy', 'en-US') : String(value),
+    }));
   }
 }

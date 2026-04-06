@@ -1,0 +1,8 @@
+<div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+  @for (detail of details(); track detail.label) {
+    <div>
+      <span class="font-semibold">{{ detail.label }}: </span>
+      <span>{{ detail.value }}</span>
+    </div>
+  }
+</div>

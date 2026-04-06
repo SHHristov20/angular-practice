@@ -5,15 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { DialogService } from '../shared/confirm-dialog/dialog.service';
-import { TableHeaderComponent } from "../shared/table-header/table-header.component";
+import { TableHeaderComponent } from '../shared/table/table-header/table-header.component';
 import { OnInit } from '@angular/core';
-import { DetailsRowComponent } from "../shared/details-row/details-row.component";
+import { DetailsRowComponent } from '../shared/table/details-row/details-row.component';
 
 @Component({
   selector: 'app-employees',
-  imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe, TableHeaderComponent, DetailsRowComponent],
+  imports: [FormsModule, MatPaginatorModule, RouterLink, TableHeaderComponent, DetailsRowComponent],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
 })
@@ -34,7 +33,7 @@ export class EmployeesComponent implements OnInit {
   }
 
   setupParamListener() {
-    const subscription = this.activatedRoute.queryParams.subscribe(params => {
+    const subscription = this.activatedRoute.queryParams.subscribe((params) => {
       const sortDirection = params['sortDirection'] || 'asc';
       const sortBy = params['sortBy'];
 
@@ -66,6 +65,11 @@ export class EmployeesComponent implements OnInit {
   }
 
   onFilterChange(filter: { property: string; value: string }) {
-    this.employees.set(this.employeeService.filterEmployees({ property: filter.property as keyof Employee, value: filter.value }));
+    this.employees.set(
+      this.employeeService.filterEmployees({
+        property: filter.property as keyof Employee,
+        value: filter.value,
+      }),
+    );
   }
 }

@@ -10,6 +10,18 @@
   />
 
   <app-form-input
+    [label]="'Email'"
+    [control]="form.controls['email']"
+    [errorMessage]="'Valid email is required'"
+  />
+
+  <app-form-input
+    [label]="'Role'"
+    [control]="form.controls['role']"
+    [errorMessage]="'Role is required'"
+  />
+
+  <app-form-input
     [label]="'Department'"
     [control]="form.controls['department']"
     [errorMessage]="'Department is required'"
@@ -19,6 +31,13 @@
     [label]="'Starting date'"
     [control]="form.controls['startDate']"
     [errorMessage]="'Starting date is required'"
+  />
+
+  <app-form-input
+    [label]="'Salary'"
+    type="number"
+    [control]="form.controls['salary']"
+    [errorMessage]="'Salary must be a positive number'"
   />
 
   <div class="flex items-center gap-3 px-1">

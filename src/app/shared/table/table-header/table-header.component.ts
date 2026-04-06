@@ -1,5 +1,5 @@
-import { Component, input, output, signal, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Component, input, output, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-table-header-cell',
@@ -10,7 +10,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 export class TableHeaderComponent {
   label = input.required<string>();
   sortable = input<boolean>(false);
-  sortDirection: 'asc' | 'desc' = 'asc';
+  sortDirection: 'asc' | 'desc' = 'desc';
   filterable = input<boolean>(false);
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -19,12 +19,12 @@ export class TableHeaderComponent {
 
   toggleSort() {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.router.navigate([], { queryParams: { sortBy: this.propertyName(), sortDirection: this.sortDirection } });
+    this.router.navigate([], {
+      queryParams: { sortBy: this.propertyName(), sortDirection: this.sortDirection },
+    });
   }
 
   onFilterChange(value: string) {
-    console.log(value)
-    this.filterChange.emit({  property: this.propertyName(), value: value});
+    this.filterChange.emit({ property: this.propertyName(), value: value });
   }
-
 }

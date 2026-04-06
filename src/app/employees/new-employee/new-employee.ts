@@ -6,9 +6,9 @@ import { EmployeeService } from '../employee.service';
 import { NewEmployeeDto } from '../employee.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../shared/confirm-dialog/dialog.service';
-import { FormInputComponent } from '../../shared/form-input/form-input.component';
-import { FormDatepickerComponent } from '../../shared/form-datepicker/form-datepicker.component';
-import { FormCheckboxComponent } from '../../shared/form-checkbox/form-checkbox.component';
+import { FormInputComponent } from '../../shared/form/form-input/form-input.component';
+import { FormDatepickerComponent } from '../../shared/form/form-datepicker/form-datepicker.component';
+import { FormCheckboxComponent } from '../../shared/form/form-checkbox/form-checkbox.component';
 import { PrimaryButtonDirective } from '../../shared/directives/button/primary-button.directive';
 import { SecondaryButtonDirective } from '../../shared/directives/button/secondary-button.directive';
 
@@ -29,10 +29,19 @@ import { SecondaryButtonDirective } from '../../shared/directives/button/seconda
 export class NewEmployee implements OnInit {
   form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
     department: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    role: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     startDate: new FormControl(new Date(), {
       nonNullable: true,
       validators: [Validators.required],
+    }),
+    salary: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(0)],
     }),
     status: new FormControl(true),
   });
@@ -56,11 +65,8 @@ export class NewEmployee implements OnInit {
     const value = this.form.getRawValue();
 
     if (this.editMode && this.employeeId) {
-
       const updatedEmployee: NewEmployeeDto = {
-        name: value.name,
-        department: value.department,
-        startDate: value.startDate,
+        ...value,
         status: value.status ? 'active' : 'inactive',
       };
 
@@ -69,9 +75,7 @@ export class NewEmployee implements OnInit {
     }
 
     const newEmployee: NewEmployeeDto = {
-      name: value.name,
-      department: value.department,
-      startDate: value.startDate,
+      ...value,
       status: value.status ? 'active' : 'inactive',
     };
     this.employeeService.addEmployee(newEmployee);
@@ -92,21 +96,21 @@ export class NewEmployee implements OnInit {
   }
 
   private loadEmployeeIfEditing(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (!id) return;
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (!idParam) return;
 
-    const employeeId = Number(id);
+    const employeeId = Number(idParam);
     const employee = this.employeeService.getEmployeeById(employeeId);
 
     if (!employee) return;
+
+    const { id, expanded, ...employeeData } = employee;
 
     this.editMode = true;
     this.employeeId = employeeId;
 
     this.form.setValue({
-      name: employee.name,
-      department: employee.department,
-      startDate: employee.startDate,
+      ...employeeData,
       status: employee.status === 'active',
     });
   }
