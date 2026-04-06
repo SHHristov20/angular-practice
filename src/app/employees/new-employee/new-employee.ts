@@ -6,11 +6,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog';
 import { EmployeeService } from '../employee.service';
 import { NewEmployeeDto } from '../employee.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DialogService } from '../../shared/confirm-dialog/dialog.service';
 
 @Component({
   selector: 'app-new-employee',
@@ -33,8 +32,8 @@ export class NewEmployee implements OnInit {
     startDate: new FormControl(new Date(), [Validators.required]),
     status: new FormControl(false),
   });
-  dialog = inject(MatDialog);
   employeeService = inject(EmployeeService);
+  dialogService = inject(DialogService);
   router = inject(Router);
   route = inject(ActivatedRoute);
   private editMode = false;
@@ -88,19 +87,14 @@ export class NewEmployee implements OnInit {
   }
 
   onCancel() {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        data: {
-          title: 'Cancel',
-          message: 'You have unsaved changes. Are you sure you want to leave this page?',
-        },
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.form.reset();
-          this.router.navigate(['/employees']);
-        }
-      });
+    const title = 'Cancel';
+    const message = 'You have unsaved changes. Are you sure you want to leave this page?';
+
+    this.dialogService.openDialog(title, message).subscribe((confirmed) => {
+      if (!confirmed) return;
+
+      this.form.reset();
+      this.router.navigate(['/employees']);
+    });
   }
 }

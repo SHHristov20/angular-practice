@@ -4,10 +4,9 @@ import { Employee } from './employee.model';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRouteSnapshot, ResolveFn, RouterLink } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { DialogService } from '../shared/confirm-dialog/dialog.service';
 
 @Component({
   selector: 'app-employees',
@@ -19,12 +18,12 @@ import { DatePipe } from '@angular/common';
 export class EmployeesComponent {
   employees = input.required<Employee[]>();
   employeeService = inject(EmployeeService);
+  dialogService = inject(DialogService);
   pageSize = signal<number>(10);
   pageIndex = signal<number>(0);
   name = signal<string>('');
   department = signal<string>('');
   sortDirection = input<'asc' | 'desc'>('asc');
-  dialogRef = inject(MatDialog);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
 
@@ -48,36 +47,30 @@ export class EmployeesComponent {
     this.pageIndex.set(event.pageIndex);
   }
 
-
   onDelete(employeeId: number) {
     if (!this.employeeService.getEmployeeById(employeeId)) return;
-    this.dialogRef
-      .open(ConfirmDialogComponent, {
-        data: {
-          title: 'Delete Employee',
-          message: `Are you sure you want to delete this employee?
-        ID: ${employeeId}
-        Name: ${this.employeeService.getEmployeeById(employeeId)!.name}`,
-        },
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.employeeService.deleteEmployee(employeeId);
-          this.router.navigate(['/employees'], {
-            queryParamsHandling: 'preserve',
-            onSameUrlNavigation: 'reload',
-          });
-        }
+    const title = 'Delete Employee';
+    const message = `Are you sure you want to delete this employee?
+    ID: ${employeeId}
+    Name: ${this.employeeService.getEmployeeById(employeeId)!.name}`;
+
+    this.dialogService.openDialog(title, message).subscribe((confirmed) => {
+      if (!confirmed) return;
+
+      this.employeeService.deleteEmployee(employeeId);
+      this.router.navigate(['/employees'], {
+        queryParamsHandling: 'preserve',
+        onSameUrlNavigation: 'reload',
       });
+    });
   }
 }
 
 export const resolveEmployees: ResolveFn<Employee[]> = (route: ActivatedRouteSnapshot) => {
   const employeeService = inject(EmployeeService);
-  const sortBy = route.queryParamMap.get('sortBy') as keyof Employee || 'name';
+  const sortBy = (route.queryParamMap.get('sortBy') as keyof Employee) || 'name';
   const direction = route.queryParamMap.get('sortDirection') as 'asc' | 'desc';
-  
+
   employeeService.sortEmployees(sortBy, direction);
 
   return employeeService.employees;
