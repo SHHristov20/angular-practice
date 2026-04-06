@@ -14,5 +14,5 @@ export const departmentsRoutes: Routes = [
   {
     path: 'edit/:id',
     component: DepartmentFormComponent,
-  }
+  },
 ];

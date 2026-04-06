@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'employees',
-    pathMatch: 'full',
+    component: HomeComponent
   },
   {
     path: 'employees',
@@ -14,4 +14,8 @@ export const routes: Routes = [
     path: 'departments',
     loadChildren: () => import('./departments/departments.routes').then((m) => m.departmentsRoutes),
   },
+  {
+    path: '**',
+    redirectTo: '/',
+  }
 ];

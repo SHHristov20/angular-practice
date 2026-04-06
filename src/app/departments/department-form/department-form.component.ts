@@ -8,7 +8,7 @@ import { DialogService } from '../../shared/confirm-dialog/dialog.service';
 import { FormInputComponent } from '../../shared/form/form-input/form-input.component';
 import { PrimaryButtonDirective } from '../../shared/directives/button/primary-button.directive';
 import { SecondaryButtonDirective } from '../../shared/directives/button/secondary-button.directive';
-import { FormTextareaComponent } from "../../shared/form/form-textarea/form-textarea.component";
+import { FormTextareaComponent } from '../../shared/form/form-textarea/form-textarea.component';
 
 @Component({
   selector: 'app-new-department',
@@ -18,8 +18,8 @@ import { FormTextareaComponent } from "../../shared/form/form-textarea/form-text
     FormInputComponent,
     PrimaryButtonDirective,
     SecondaryButtonDirective,
-    FormTextareaComponent
-],
+    FormTextareaComponent,
+  ],
   templateUrl: './department-form.component.html',
   styleUrl: './department-form.component.css',
 })
