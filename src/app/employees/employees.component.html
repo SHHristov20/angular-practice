@@ -2,60 +2,33 @@
   <thead class="bg-gray-100">
     <tr>
       <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
-        <div class="flex items-center justify-between">
-          <span>Name</span>
-          <div class="flex items-center gap-2">
-            <button
-              class="text-xs px-2 py-1 border rounded hover:bg-gray-200"
-              routerLink="."
-              [queryParams]="{
-                sortBy: 'name',
-                sortDirection: sortDirection() === 'asc' ? 'desc' : 'asc',
-              }"
-            >
-              {{ sortDirection() === 'asc' ? '↑' : '↓' }}
-            </button>
-            <input
-              [(ngModel)]="name"
-              type="text"
-              placeholder="Search..."
-              class="text-xs px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-24"
-            />
-          </div>
-        </div>
+        <app-table-header-cell
+          label="Name"
+          propertyName="name"
+          [sortable]="true"
+          [filterable]="true"
+          (filterChange)="onFilterChange($event)"
+        ></app-table-header-cell>
       </th>
 
       <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
-        <div class="flex items-center justify-between">
-          <span>Department</span>
-          <div class="flex items-center gap-2">
-            <button
-              class="text-xs px-2 py-1 border rounded hover:bg-gray-200"
-              routerLink="."
-              [queryParams]="{
-                sortBy: 'department',
-                sortDirection: sortDirection() === 'asc' ? 'desc' : 'asc',
-              }"
-            >
-              {{ sortDirection() === 'asc' ? '↑' : '↓' }}
-            </button>
-            <input
-              [(ngModel)]="department"
-              type="text"
-              placeholder="Search..."
-              class="text-xs px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-24"
-            />
-          </div>
-        </div>
+        <app-table-header-cell
+          label="Department"
+          propertyName="department"
+          [sortable]="true"
+          [filterable]="true"
+          (filterChange)="onFilterChange($event)"
+        ></app-table-header-cell>
       </th>
 
       <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
-        <div class="flex items-center justify-between">
-          <span>Status</span>
-        </div>
+        <app-table-header-cell
+          label="Status"
+          propertyName="status"
+          [sortable]="true"
+        ></app-table-header-cell>
       </th>
 
-      <!-- Actions Header -->
       <th class="text-right px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
         Actions
       </th>
@@ -64,7 +37,7 @@
 
   <tbody>
     @for (
-      employee of filteredEmployees().slice(
+      employee of employees().slice(
         pageIndex() * pageSize(),
         (pageIndex() + 1) * pageSize()
       );
@@ -203,9 +176,9 @@
 <!-- Pagination -->
 <div class="flex items-center justify-center gap-2 mt-6">
   <mat-paginator
-    [length]="filteredEmployees().length"
+    [length]="employees().length"
     [pageSize]="pageSize()"
-    [pageSizeOptions]="[10, 20, 50]"
+    [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="changePage($event)"
   ></mat-paginator>
 </div>

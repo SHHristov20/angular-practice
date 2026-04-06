@@ -1,0 +1,28 @@
+<div class="flex items-center gap-2">
+  <span>{{ label() }}</span>
+
+  <div class="flex items-center gap-2">
+    @if (sortable()) {
+      <button
+        class="text-xs px-2 py-1 border rounded hover:bg-gray-200"
+        (click)="toggleSort()"
+      >
+          @if (route.snapshot.queryParamMap.get('sortBy') === propertyName()) {
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          }
+          @else {
+            <span class="text-gray-400">↕</span>
+          }
+      </button>
+    }
+
+    @if (filterable()) {
+      <input
+        (input)="onFilterChange($event.target.value)"
+        type="text"
+        placeholder="Search..."
+        class="text-xs px-2 py-1 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-24"
+      />
+    }
+  </div>
+</div>

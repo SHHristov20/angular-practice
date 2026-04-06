@@ -1,21 +1,22 @@
-import { Component, inject, signal, input, computed, effect } from '@angular/core';
+import { Component, inject, signal, input, DestroyRef } from '@angular/core';
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.model';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { ActivatedRouteSnapshot, ResolveFn, RouterLink } from '@angular/router';
-import { Router, ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DialogService } from '../shared/confirm-dialog/dialog.service';
+import { TableHeaderComponent } from "../shared/table-header/table-header.component";
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-employees',
-  imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe],
+  imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe, TableHeaderComponent],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
 })
-export class EmployeesComponent {
-  employees = input.required<Employee[]>();
+export class EmployeesComponent implements OnInit {
   employeeService = inject(EmployeeService);
   dialogService = inject(DialogService);
   pageSize = signal<number>(10);
@@ -23,24 +24,26 @@ export class EmployeesComponent {
   name = signal<string>('');
   department = signal<string>('');
   sortDirection = input<'asc' | 'desc'>('asc');
-  router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
+  employees = signal<Employee[]>(this.employeeService.employees);
+  destroyRef = inject(DestroyRef);
 
-  filteredEmployees = computed<Employee[]>(() => {
-    if (!this.name() && !this.department()) {
-      return this.employees();
-    }
+  ngOnInit(): void {
+    this.setupParamListener();
+  }
 
-    return this.employees().filter((employee) => {
-      const matchesName = this.name()
-        ? employee.name.toLowerCase().includes(this.name().toLowerCase())
-        : true;
-      const matchesDepartment = this.department()
-        ? employee.department.toLowerCase().includes(this.department().toLowerCase())
-        : true;
-      return matchesName && matchesDepartment;
+  setupParamListener() {
+    const subscription = this.activatedRoute.queryParams.subscribe(params => {
+      const sortDirection = params['sortDirection'] || 'asc';
+      const sortBy = params['sortBy'];
+
+      this.employees.set(this.employeeService.sortEmployees(sortBy, sortDirection));
     });
-  });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
+  }
 
   changePage(event: PageEvent) {
     this.pageSize.set(event.pageSize);
@@ -58,20 +61,10 @@ export class EmployeesComponent {
       if (!confirmed) return;
 
       this.employeeService.deleteEmployee(employeeId);
-      this.router.navigate(['/employees'], {
-        queryParamsHandling: 'preserve',
-        onSameUrlNavigation: 'reload',
-      });
     });
   }
+
+  onFilterChange(filter: { property: string; value: string }) {
+    this.employees.set(this.employeeService.filterEmployees({ property: filter.property as keyof Employee, value: filter.value }));
+  }
 }
-
-export const resolveEmployees: ResolveFn<Employee[]> = (route: ActivatedRouteSnapshot) => {
-  const employeeService = inject(EmployeeService);
-  const sortBy = (route.queryParamMap.get('sortBy') as keyof Employee) || 'name';
-  const direction = route.queryParamMap.get('sortDirection') as 'asc' | 'desc';
-
-  employeeService.sortEmployees(sortBy, direction);
-
-  return employeeService.employees;
-};

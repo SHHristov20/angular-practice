@@ -42,8 +42,8 @@ export class EmployeeService {
     }
   }
 
-  sortEmployees(sortBy: keyof Employee, direction: 'asc' | 'desc'): void {
-    this.employees.sort((a, b) => {
+  sortEmployees(sortBy: keyof Employee, direction: 'asc' | 'desc'): Employee[] {
+    const sortedEmployees = this.employees.sort((a, b) => {
       const left = a[sortBy];
       const right = b[sortBy];
 
@@ -58,6 +58,16 @@ export class EmployeeService {
       }
 
       return direction === 'asc' ? result : -result;
+    });
+
+    return sortedEmployees;
+  }
+
+  filterEmployees(filter: { property: keyof Employee; value: string }): Employee[] {
+    console.log(filter)
+    return this.employees.filter((employee) => {
+      const employeeValue = String(employee[filter.property]).toLowerCase();
+      return employeeValue.includes(filter.value.toLowerCase());
     });
   }
 }
