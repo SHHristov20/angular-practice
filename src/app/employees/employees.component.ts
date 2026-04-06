@@ -9,6 +9,8 @@ import { DialogService } from '../shared/confirm-dialog/dialog.service';
 import { TableHeaderComponent } from '../shared/table/table-header/table-header.component';
 import { OnInit } from '@angular/core';
 import { DetailsRowComponent } from '../shared/table/details-row/details-row.component';
+import { sort, filter } from '../shared/utils/object.utils';
+import { getDetails } from '../shared/utils/object.utils';
 
 @Component({
   selector: 'app-employees',
@@ -37,7 +39,7 @@ export class EmployeesComponent implements OnInit {
       const sortDirection = params['sortDirection'] || 'asc';
       const sortBy = params['sortBy'];
 
-      this.employees.set(this.employeeService.sortEmployees(sortBy, sortDirection));
+      this.employees.set(sort<Employee>(this.employeeService.employees, sortBy, sortDirection));
     });
 
     this.destroyRef.onDestroy(() => {
@@ -64,12 +66,16 @@ export class EmployeesComponent implements OnInit {
     });
   }
 
-  onFilterChange(filter: { property: string; value: string }) {
+  onFilterChange(filters: { property: string; value: string }) {
     this.employees.set(
-      this.employeeService.filterEmployees({
-        property: filter.property as keyof Employee,
-        value: filter.value,
+      filter<Employee>(this.employeeService.employees, {
+        property: filters.property as keyof Employee,
+        value: filters.value,
       }),
     );
+  }
+
+  getDetails(employee: Employee) {
+    return getDetails<Employee>(employee);
   }
 }

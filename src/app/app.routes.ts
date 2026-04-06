@@ -1,4 +1,4 @@
-import { Routes, UrlTree } from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -9,5 +9,9 @@ export const routes: Routes = [
   {
     path: 'employees',
     loadChildren: () => import('./employees/employees.routes').then((m) => m.employeesRoutes),
+  },
+  {
+    path: 'departments',
+    loadChildren: () => import('./departments/departments.routes').then((m) => m.departmentsRoutes),
   },
 ];

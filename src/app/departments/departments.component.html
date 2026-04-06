@@ -37,27 +37,27 @@
 
   <tbody>
     @for (
-      employee of employees().slice(pageIndex() * pageSize(), (pageIndex() + 1) * pageSize());
-      track employee.id
+      department of departments().slice(pageIndex() * pageSize(), (pageIndex() + 1) * pageSize());
+      track department.id
     ) {
       <tr
         class="transition-colors duration-200 hover:bg-gray-50"
-        [class]="employee.status === 'active' ? 'active' : 'inactive'"
+        [class]="department.name === 'active' ? 'active' : 'inactive'"
       >
         <td class="px-6 py-4 text-sm text-gray-600 border-t">
-          {{ employee.name }}
+          {{ department.name }}
         </td>
 
         <td class="px-6 py-4 text-sm text-gray-600 border-t">
-          {{ employee.department }}
+          {{ department.name }}
         </td>
 
         <td class="px-6 py-4 text-sm border-t">
           <span
             class="active px-2 py-1 rounded-lg text-xs font-medium"
-            [class]="employee.status === 'active' ? 'active' : 'inactive'"
+            [class]="department.name === 'active' ? 'active' : 'inactive'"
           >
-            {{ employee.status }}
+            {{ department.name }}
           </span>
         </td>
 
@@ -69,7 +69,7 @@
               type="button"
               class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition"
               title="Expand"
-              (click)="employee.expanded = !employee.expanded"
+              (click)="department.expanded = !department.expanded"
             >
               <!-- Expand Icon -->
               <svg
@@ -83,13 +83,13 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  [attr.d]="employee.expanded ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'"
+                  [attr.d]="department.expanded ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'"
                 />
               </svg>
             </button>
             <!-- Edit Button -->
             <button
-              routerLink="/employees/edit/{{ employee.id }}"
+              routerLink="/departments/edit/{{ department.id }}"
               class="p-2 rounded-lg hover:bg-blue-100 text-blue-600 transition"
               title="Edit"
             >
@@ -112,7 +112,7 @@
 
             <!-- Delete Button -->
             <button
-              (click)="onDelete(employee.id)"
+              (click)="onDelete(department.id)"
               class="p-2 rounded-lg hover:bg-red-100 text-red-600 transition"
               title="Delete"
             >
@@ -137,9 +137,9 @@
       </tr>
 
       <!-- Expanded Details Row -->
-      <tr class="bg-gray-50" [style]="employee.expanded ? 'display: table-row' : 'display: none'">
+      <tr class="bg-gray-50" [style]="department.expanded ? 'display: table-row' : 'display: none'">
         <td colspan="4" class="px-6 py-4 border-t">
-          <app-details-row [details]="getDetails(employee)" />
+          <!-- <app-details-row [details]="departmentService.getDetails(department)" /> -->
         </td>
       </tr>
     }
@@ -147,11 +147,11 @@
 </table>
 
 <!-- Pagination -->
-<div class="flex items-center justify-center gap-2 mt-6">
+<!-- <div class="flex items-center justify-center gap-2 mt-6">
   <mat-paginator
-    [length]="employees().length"
+    [length]="departments().length"
     [pageSize]="pageSize()"
     [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="changePage($event)"
   ></mat-paginator>
-</div>
+</div> -->

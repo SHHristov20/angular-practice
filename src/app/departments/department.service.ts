@@ -7,8 +7,7 @@ import { Department, mockDepartments, NewDepartmentDto } from './department.mode
 export class DepartmentService {
   private readonly _departments: Department[] = mockDepartments;
 
-  constructor() {
-  }
+  constructor() {}
 
   get departments(): Department[] {
     return this._departments;

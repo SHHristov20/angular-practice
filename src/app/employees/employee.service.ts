@@ -44,41 +44,4 @@ export class EmployeeService {
       this._employees.splice(employeeIndex, 1);
     }
   }
-
-  sortEmployees(sortBy: keyof Employee, direction: 'asc' | 'desc'): Employee[] {
-    const sortedEmployees = this.employees.sort((a, b) => {
-      const left = a[sortBy];
-      const right = b[sortBy];
-
-      let result = 0;
-
-      if (typeof left === 'number' && typeof right === 'number') {
-        result = left - right;
-      } else if (left instanceof Date && right instanceof Date) {
-        result = left.getTime() - right.getTime();
-      } else {
-        result = String(left).localeCompare(String(right));
-      }
-
-      return direction === 'asc' ? result : -result;
-    });
-
-    return sortedEmployees;
-  }
-
-  filterEmployees(filter: { property: keyof Employee; value: string }): Employee[] {
-    return this.employees.filter((employee) => {
-      const employeeValue = String(employee[filter.property]).toLowerCase();
-      return employeeValue.includes(filter.value.toLowerCase());
-    });
-  }
-
-  getDetails(employee: any) {
-    const { expanded, ...rest } = employee;
-
-    return Object.entries(rest).map(([key, value]) => ({
-      label: key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()),
-      value: value instanceof Date ? formatDate(value, 'MM/dd/yyyy', 'en-US') : String(value),
-    }));
-  }
 }

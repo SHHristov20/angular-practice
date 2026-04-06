@@ -5,6 +5,7 @@ export type Department = {
   location: string;
   budget: number;
   createdAt: Date;
+  expanded?: boolean;
 };
 
 export type NewDepartmentDto = {
