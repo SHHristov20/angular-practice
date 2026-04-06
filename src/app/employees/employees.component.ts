@@ -27,7 +27,7 @@ export class EmployeesComponent implements OnInit {
   department = signal<string>('');
   sortDirection = input<'asc' | 'desc'>('asc');
   activatedRoute = inject(ActivatedRoute);
-  employees = signal<Employee[]>(this.employeeService.employees);
+  employees = signal<Employee[]>(this.employeeService.getAll());
   destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class EmployeesComponent implements OnInit {
       const sortDirection = params['sortDirection'] || 'asc';
       const sortBy = params['sortBy'];
 
-      this.employees.set(sort<Employee>(this.employeeService.employees, sortBy, sortDirection));
+      this.employees.set(sort<Employee>(this.employeeService.getAll(), sortBy, sortDirection));
     });
 
     this.destroyRef.onDestroy(() => {
@@ -53,22 +53,22 @@ export class EmployeesComponent implements OnInit {
   }
 
   onDelete(employeeId: number) {
-    if (!this.employeeService.getEmployeeById(employeeId)) return;
+    if (!this.employeeService.getById(employeeId)) return;
     const title = 'Delete Employee';
     const message = `Are you sure you want to delete this employee?
     ID: ${employeeId}
-    Name: ${this.employeeService.getEmployeeById(employeeId)!.name}`;
+    Name: ${this.employeeService.getById(employeeId)!.name}`;
 
     this.dialogService.openDialog(title, message).subscribe((confirmed) => {
       if (!confirmed) return;
 
-      this.employeeService.deleteEmployee(employeeId);
+      this.employeeService.delete(employeeId);
     });
   }
 
   onFilterChange(filters: { property: string; value: string }) {
     this.employees.set(
-      filter<Employee>(this.employeeService.employees, {
+      filter<Employee>(this.employeeService.getAll(), {
         property: filters.property as keyof Employee,
         value: filters.value,
       }),

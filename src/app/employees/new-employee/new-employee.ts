@@ -70,7 +70,7 @@ export class NewEmployee implements OnInit {
         status: value.status ? 'active' : 'inactive',
       };
 
-      this.employeeService.editEmployee(this.employeeId, updatedEmployee);
+      this.employeeService.edit(this.employeeId, updatedEmployee);
       this.router.navigate(['/employees']);
     }
 
@@ -78,7 +78,7 @@ export class NewEmployee implements OnInit {
       ...value,
       status: value.status ? 'active' : 'inactive',
     };
-    this.employeeService.addEmployee(newEmployee);
+    this.employeeService.add(newEmployee);
     this.form.reset();
     this.router.navigate(['/employees']);
   }
@@ -100,7 +100,7 @@ export class NewEmployee implements OnInit {
     if (!idParam) return;
 
     const employeeId = Number(idParam);
-    const employee = this.employeeService.getEmployeeById(employeeId);
+    const employee = this.employeeService.getById(employeeId);
 
     if (!employee) return;
 
