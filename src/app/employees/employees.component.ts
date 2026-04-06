@@ -1,7 +1,6 @@
 import { Component, inject, signal, input, computed, effect } from '@angular/core';
 import { EmployeeService } from './employee.service';
 import { Employee } from './employee.model';
-import { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRouteSnapshot, ResolveFn, RouterLink } from '@angular/router';
@@ -17,7 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './employees.component.css',
   standalone: true,
 })
-export class EmployeesComponent implements OnInit {
+export class EmployeesComponent {
   employees = input.required<Employee[]>();
   employeeService = inject(EmployeeService);
   pageSize = signal<number>(10);
@@ -49,7 +48,6 @@ export class EmployeesComponent implements OnInit {
     this.pageIndex.set(event.pageIndex);
   }
 
-  ngOnInit(): void {}
 
   onDelete(employeeId: number) {
     if (!this.employeeService.getEmployeeById(employeeId)) return;
@@ -77,17 +75,10 @@ export class EmployeesComponent implements OnInit {
 
 export const resolveEmployees: ResolveFn<Employee[]> = (route: ActivatedRouteSnapshot) => {
   const employeeService = inject(EmployeeService);
-  const employees = [...employeeService.employees];
-  const sortBy = route.queryParamMap.get('sortBy');
-  const direction = route.queryParamMap.get('sortDirection') || 'asc';
-  if (sortBy === 'name') {
-    return direction === 'asc'
-      ? [...employees].sort((a, b) => (a.name < b.name ? -1 : 1))
-      : [...employees].sort((a, b) => (b.name < a.name ? -1 : 1));
-  } else if (sortBy === 'department') {
-    return direction === 'asc'
-      ? [...employees].sort((a, b) => (a.department < b.department ? -1 : 1))
-      : [...employees].sort((a, b) => (b.department < a.department ? -1 : 1));
-  }
-  return employees;
+  const sortBy = route.queryParamMap.get('sortBy') as keyof Employee || 'name';
+  const direction = route.queryParamMap.get('sortDirection') as 'asc' | 'desc';
+  
+  employeeService.sortEmployees(sortBy, direction);
+
+  return employeeService.employees;
 };

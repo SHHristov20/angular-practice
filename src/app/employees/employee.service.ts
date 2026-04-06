@@ -41,4 +41,23 @@ export class EmployeeService {
       this._employees.splice(employeeIndex, 1);
     }
   }
+
+  sortEmployees(sortBy: keyof Employee, direction: 'asc' | 'desc'): void {
+    this.employees.sort((a, b) => {
+      const left = a[sortBy];
+      const right = b[sortBy];
+
+      let result = 0;
+
+      if (typeof left === 'number' && typeof right === 'number') {
+        result = left - right;
+      } else if (left instanceof Date && right instanceof Date) {
+        result = left.getTime() - right.getTime();
+      } else {
+        result = String(left).localeCompare(String(right));
+      }
+
+      return direction === 'asc' ? result : -result;
+    });
+  }
 }
