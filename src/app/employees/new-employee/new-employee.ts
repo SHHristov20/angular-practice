@@ -1,8 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,27 +6,28 @@ import { EmployeeService } from '../employee.service';
 import { NewEmployeeDto } from '../employee.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../shared/confirm-dialog/dialog.service';
+import { FormInputComponent } from '../../shared/form-input/form-input.component';
+import { FormDatepickerComponent } from '../../shared/form-datepicker/form-datepicker.component';
+import { FormCheckboxComponent } from '../../shared/form-checkbox/form-checkbox.component';
 
 @Component({
   selector: 'app-new-employee',
   providers: [provideNativeDateAdapter()],
   imports: [
-    MatFormFieldModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatDatepickerModule,
     ReactiveFormsModule,
+    FormInputComponent,
+    FormDatepickerComponent,
+    FormCheckboxComponent,
   ],
   templateUrl: './new-employee.html',
   styleUrl: './new-employee.css',
-  standalone: true,
 })
 export class NewEmployee implements OnInit {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     department: new FormControl('', [Validators.required]),
     startDate: new FormControl(new Date(), [Validators.required]),
-    status: new FormControl(false),
+    status: new FormControl(true),
   });
   employeeService = inject(EmployeeService);
   dialogService = inject(DialogService);
@@ -51,7 +48,7 @@ export class NewEmployee implements OnInit {
         this.form.setValue({
           name: employee.name,
           department: employee.department,
-          startDate: new Date(employee.startDate),
+          startDate: employee.startDate,
           status: employee.status === 'active',
         });
       }

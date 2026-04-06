@@ -13,7 +13,6 @@ import { DialogService } from '../shared/confirm-dialog/dialog.service';
   imports: [FormsModule, MatPaginatorModule, RouterLink, DatePipe],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
-  standalone: true,
 })
 export class EmployeesComponent {
   employees = input.required<Employee[]>();

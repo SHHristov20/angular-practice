@@ -1,0 +1,8 @@
+<mat-form-field class="w-full">
+  <mat-label>{{ label() }}</mat-label>
+  <input matInput class="w-full" [formControl]="control()" />
+
+  @if (control().invalid && control().touched) {
+    <mat-error class="text-xs">{{ errorMessage() }}</mat-error>
+  }
+</mat-form-field>

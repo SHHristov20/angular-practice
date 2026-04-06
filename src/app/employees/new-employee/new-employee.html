@@ -1,38 +1,31 @@
-<form [formGroup]="form" class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6">
-  <!-- Input -->
-  <mat-form-field class="w-full">
-    <mat-label>Name</mat-label>
-    <input matInput class="w-full" formControlName="name" />
-    @if (form.controls['name'].invalid && form.controls['name'].touched) {
-      <mat-error class="text-xs">Name is required</mat-error>
-    }
-  </mat-form-field>
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md space-y-6"
+>
+  <app-form-input
+    [label]="'Name'"
+    [control]="form.controls['name']"
+    [errorMessage]="'Name is required'"
+  />
 
-  <!-- Input -->
-  <mat-form-field class="w-full">
-    <mat-label>Department</mat-label>
-    <input matInput class="w-full" formControlName="department" />
-    @if (form.controls['department'].invalid && form.controls['department'].touched) {
-      <mat-error class="text-xs">Department is required</mat-error>
-    }
-  </mat-form-field>
+  <app-form-input
+    [label]="'Department'"
+    [control]="form.controls['department']"
+    [errorMessage]="'Department is required'"
+  />
 
-  <!-- Datepicker -->
-  <mat-form-field class="w-full">
-    <mat-label>Starting date</mat-label>
+  <app-form-datepicker
+    [label]="'Starting date'"
+    [control]="form.controls['startDate']"
+    [errorMessage]="'Starting date is required'"
+  />
 
-    <input matInput [matDatepicker]="picker" class="w-full" formControlName="startDate" />
-    @if (form.controls['startDate'].invalid && form.controls['startDate'].touched) {
-      <mat-error class="text-xs">Starting date is required</mat-error>
-    }
-
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <!-- Checkbox -->
   <div class="flex items-center gap-3 px-1">
-    <mat-checkbox class="text-gray-700" formControlName="status">Is User Active</mat-checkbox>
+    <app-form-checkbox
+      [title]="'Active'"
+      [control]="form.controls['status']"
+    />
   </div>
 
   <!-- Buttons -->
@@ -46,9 +39,9 @@
     </button>
 
     <button
-      (click)="onSubmit()"
       type="submit"
       class="px-5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+      [disabled]="form.invalid"
     >
       Submit
     </button>
