@@ -43,6 +43,7 @@ export class EmployeesComponent {
   });
 
   changePage(event: PageEvent) {
+    this.pageSize.set(event.pageSize);
     this.pageIndex.set(event.pageIndex);
   }
 
