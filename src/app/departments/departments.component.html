@@ -13,8 +13,8 @@
 
       <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
         <app-table-header-cell
-          label="Department"
-          propertyName="department"
+          label="Location"
+          propertyName="location"
           [sortable]="true"
           [filterable]="true"
           (filterChange)="onFilterChange($event)"
@@ -23,9 +23,11 @@
 
       <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase tracking-wide">
         <app-table-header-cell
-          label="Status"
-          propertyName="status"
+          label="Description"
+          propertyName="description"
           [sortable]="true"
+          [filterable]="true"
+          (filterChange)="onFilterChange($event)"
         ></app-table-header-cell>
       </th>
 
@@ -40,24 +42,18 @@
       department of departments().slice(pageIndex() * pageSize(), (pageIndex() + 1) * pageSize());
       track department.id
     ) {
-      <tr
-        class="transition-colors duration-200 hover:bg-gray-50"
-        [class]="department.name === 'active' ? 'active' : 'inactive'"
-      >
+      <tr class="transition-colors duration-200 hover:bg-gray-50">
         <td class="px-6 py-4 text-sm text-gray-600 border-t">
           {{ department.name }}
         </td>
 
         <td class="px-6 py-4 text-sm text-gray-600 border-t">
-          {{ department.name }}
+          {{ department.location }}
         </td>
 
-        <td class="px-6 py-4 text-sm border-t">
-          <span
-            class="active px-2 py-1 rounded-lg text-xs font-medium"
-            [class]="department.name === 'active' ? 'active' : 'inactive'"
-          >
-            {{ department.name }}
+        <td class="px-6 py-4 text-sm text-gray-600 border-t max-w-xs">
+          <span class="block truncate" [title]="department.description">
+            {{ department.description }}
           </span>
         </td>
 
@@ -139,7 +135,7 @@
       <!-- Expanded Details Row -->
       <tr class="bg-gray-50" [style]="department.expanded ? 'display: table-row' : 'display: none'">
         <td colspan="4" class="px-6 py-4 border-t">
-          <!-- <app-details-row [details]="departmentService.getDetails(department)" /> -->
+          <app-details-row [details]="getDetails(department)" />
         </td>
       </tr>
     }
@@ -147,11 +143,11 @@
 </table>
 
 <!-- Pagination -->
-<!-- <div class="flex items-center justify-center gap-2 mt-6">
+<div class="flex items-center justify-center gap-2 mt-6">
   <mat-paginator
     [length]="departments().length"
     [pageSize]="pageSize()"
     [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="changePage($event)"
   ></mat-paginator>
-</div> -->
+</div>

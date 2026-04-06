@@ -51,7 +51,8 @@ export const mockDepartments: Department[] = [
   {
     id: 5,
     name: 'Finance',
-    description: 'Oversees budgeting, forecasting, and financial reporting.',
+    description:
+      'Oversees budgeting, forecasting, and financial reporting. Oversees budgeting, forecasting, and financial reporting.',
     location: 'Sofia',
     budget: 275000,
     createdAt: new Date('2016-11-18'),
