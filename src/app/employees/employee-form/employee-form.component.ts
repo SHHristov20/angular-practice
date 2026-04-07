@@ -11,6 +11,8 @@ import { FormDatepickerComponent } from '../../shared/form/form-datepicker/form-
 import { FormCheckboxComponent } from '../../shared/form/form-checkbox/form-checkbox.component';
 import { PrimaryButtonDirective } from '../../shared/directives/button/primary-button.directive';
 import { SecondaryButtonDirective } from '../../shared/directives/button/secondary-button.directive';
+import { DepartmentService } from '../../departments/department.service';
+import { FormSelectComponent } from '../../shared/form/form-select/form-select.component';
 
 @Component({
   selector: 'app-new-employee',
@@ -22,6 +24,7 @@ import { SecondaryButtonDirective } from '../../shared/directives/button/seconda
     FormCheckboxComponent,
     PrimaryButtonDirective,
     SecondaryButtonDirective,
+    FormSelectComponent,
   ],
   templateUrl: './employee-form.component.html',
   styleUrl: './employee-form.component.css',
@@ -46,6 +49,7 @@ export class EmployeeFormComponent implements OnInit {
     status: new FormControl(true),
   });
   employeeService = inject(EmployeeService);
+  departmentService = inject(DepartmentService);
   dialogService = inject(DialogService);
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -54,6 +58,13 @@ export class EmployeeFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployeeIfEditing();
+  }
+
+  get departmentsSelectOptions() {
+    return this.departmentService.getAll().map((d) => ({
+      value: d.id.toString(),
+      viewValue: `${d.id}: ${d.name}`,
+    }));
   }
 
   onSubmit() {
@@ -68,6 +79,8 @@ export class EmployeeFormComponent implements OnInit {
       const updatedEmployee: NewEmployeeDto = {
         ...value,
         status: value.status ? 'active' : 'inactive',
+        departmentId: Number(value.department),
+        department: this.departmentService.getById(Number(value.department)),
       };
 
       this.employeeService.edit(this.employeeId, updatedEmployee);
@@ -77,6 +90,8 @@ export class EmployeeFormComponent implements OnInit {
     const newEmployee: NewEmployeeDto = {
       ...value,
       status: value.status ? 'active' : 'inactive',
+      departmentId: Number(value.department),
+      department: this.departmentService.getById(Number(value.department)),
     };
     this.employeeService.add(newEmployee);
     this.form.reset();
@@ -104,7 +119,7 @@ export class EmployeeFormComponent implements OnInit {
 
     if (!employee) return;
 
-    const { id, expanded, ...employeeData } = employee;
+    const { id, expanded, departmentId, ...employeeData } = employee;
 
     this.editMode = true;
     this.employeeId = employeeId;
@@ -112,6 +127,7 @@ export class EmployeeFormComponent implements OnInit {
     this.form.setValue({
       ...employeeData,
       status: employee.status === 'active',
+      department: employee.departmentId.toString(),
     });
   }
 }

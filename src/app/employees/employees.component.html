@@ -49,7 +49,11 @@
         </td>
 
         <td class="px-6 py-4 text-sm text-gray-600 border-t">
-          {{ employee.department }}
+          {{
+            employee.department?.name ||
+              departmentService.getById(employee.departmentId)?.name ||
+              'N/A'
+          }}
         </td>
 
         <td class="px-6 py-4 text-sm border-t">

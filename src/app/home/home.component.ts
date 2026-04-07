@@ -8,4 +8,4 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./home.component.css'],
   imports: [PrimaryButtonDirective, RouterLink],
 })
-export class HomeComponent { }
+export class HomeComponent {}

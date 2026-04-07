@@ -2,11 +2,7 @@
   <h1 class="text-xl font-semibold text-gray-800" routerLink="/">Employee Management</h1>
 
   <nav class="flex items-center gap-2 text-sm">
-    <button
-      appSecondaryButton
-      routerLink="/employees"
-      routerLinkActive="text-blue-600 font-medium"
-    >
+    <button appSecondaryButton routerLink="/employees" routerLinkActive="text-blue-600 font-medium">
       Employees
     </button>
 
@@ -20,14 +16,12 @@
   </nav>
 
   <div class="flex items-center gap-3">
-    @switch(router.url) {
-      @case('/employees')
-      {
+    @switch (router.url.split('?')[0]) {
+      @case ('/employees') {
         <button appPrimaryButton routerLink="/employees/new">Add Employee</button>
       }
 
-      @case('/departments') {
-
+      @case ('/departments') {
         <button appPrimaryButton routerLink="/departments/new">Add Department</button>
       }
     }

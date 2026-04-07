@@ -1,0 +1,12 @@
+<mat-form-field class="w-full">
+  <mat-label>{{ label() }}</mat-label>
+  <mat-select class="w-full" [formControl]="control()">
+    @for (option of options(); track option.value) {
+      <mat-option [value]="option.value">{{ option.viewValue }}</mat-option>
+    }
+  </mat-select>
+
+  @if (control().invalid && control().touched) {
+    <mat-error class="text-xs">{{ errorMessage() }}</mat-error>
+  }
+</mat-form-field>

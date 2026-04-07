@@ -15,16 +15,17 @@
     [errorMessage]="'Valid email is required'"
   />
 
+  <app-form-select
+    [label]="'Department'"
+    [control]="form.controls['department']"
+    [options]="departmentsSelectOptions"
+    [errorMessage]="'Department is required'"
+  />
+
   <app-form-input
     [label]="'Role'"
     [control]="form.controls['role']"
     [errorMessage]="'Role is required'"
-  />
-
-  <app-form-input
-    [label]="'Department'"
-    [control]="form.controls['department']"
-    [errorMessage]="'Department is required'"
   />
 
   <app-form-datepicker

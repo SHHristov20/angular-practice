@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'employees',
@@ -17,5 +17,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: '/',
-  }
+  },
 ];

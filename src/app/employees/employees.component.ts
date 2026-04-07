@@ -1,5 +1,6 @@
 import { Component, inject, signal, input, DestroyRef } from '@angular/core';
 import { EmployeeService } from './employee.service';
+import { DepartmentService } from '../departments/department.service';
 import { Employee } from './employee.model';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -20,11 +21,11 @@ import { getDetails } from '../shared/utils/object.utils';
 })
 export class EmployeesComponent implements OnInit {
   employeeService = inject(EmployeeService);
+  departmentService = inject(DepartmentService);
   dialogService = inject(DialogService);
   pageSize = signal<number>(10);
   pageIndex = signal<number>(0);
   name = signal<string>('');
-  department = signal<string>('');
   sortDirection = input<'asc' | 'desc'>('asc');
   activatedRoute = inject(ActivatedRoute);
   employees = signal<Employee[]>(this.employeeService.getAll());
