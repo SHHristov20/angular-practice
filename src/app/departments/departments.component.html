@@ -59,76 +59,11 @@
 
         <!-- Actions Buttons -->
         <td class="px-6 py-4 border-t text-right">
-          <div class="flex items-center justify-end gap-2">
-            <!-- Expand Button -->
-            <button
-              type="button"
-              class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition"
-              title="Expand"
-              (click)="department.expanded = !department.expanded"
-            >
-              <!-- Expand Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  [attr.d]="department.expanded ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7'"
-                />
-              </svg>
-            </button>
-            <!-- Edit Button -->
-            <button
-              routerLink="/departments/edit/{{ department.id }}"
-              class="p-2 rounded-lg hover:bg-blue-100 text-blue-600 transition"
-              title="Edit"
-            >
-              <!-- Pencil Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M11 5h2m-1-1v2m-6 12h12a2 2 0 002-2V9.828a2 2 0 00-.586-1.414l-3.828-3.828A2 2 0 0014.172 4H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </button>
-
-            <!-- Delete Button -->
-            <button
-              (click)="onDelete(department.id)"
-              class="p-2 rounded-lg hover:bg-red-100 text-red-600 transition"
-              title="Delete"
-            >
-              <!-- Trash Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 7h12M9 7v10m6-10v10M5 7l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 11v6m4-6v6M9 4h6a1 1 0 011 1v2H8V5a1 1 0 011-1z"
-                />
-              </svg>
-            </button>
-          </div>
+          <app-actions-row
+            (expand)="department.expanded = !department.expanded"
+            (edit)="onEdit(department.id)"
+            (delete)="onDelete(department.id)"
+          ></app-actions-row>
         </td>
       </tr>
 
