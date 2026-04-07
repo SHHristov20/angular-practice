@@ -1,0 +1,59 @@
+<table class="w-full border-collapse rounded-2xl overflow-hidden shadow-lg">
+  <thead class="bg-gray-100">
+    <tr>
+      @for (col of columns(); track col.property) {
+        <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700 uppercase">
+          <app-table-header-cell
+            [label]="col.label"
+            [propertyName]="col.property"
+            [sortable]="col.sortable || false"
+            [filterable]="col.filterable || false"
+            (filterChange)="onFilterChange($event)"
+          ></app-table-header-cell>
+        </th>
+      }
+
+      <th class="text-right px-6 py-3">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (
+      item of data().slice(pageIndex() * pageSize(), (pageIndex() + 1) * pageSize());
+      track item
+    ) {
+      <tr class="transition-colors duration-200 hover:bg-gray-50">
+        @for (col of columns(); track col.property) {
+          <td class="px-6 py-4 text-sm text-gray-600 border-t max-w-xs">
+            <span class="block truncate">
+              {{ item[col.property] }}
+            </span>
+          </td>
+        }
+
+        <td class="px-6 py-4 text-right border-t">
+          <app-actions-row
+            (edit)="edit.emit(item)"
+            (delete)="onDelete(item.id)"
+            (expand)="item.expanded = !item.expanded"
+          ></app-actions-row>
+        </td>
+      </tr>
+
+      <tr class="bg-gray-50" [style]="item.expanded ? 'display: table-row' : 'display: none'">
+        <td colspan="4" class="px-6 py-4 border-t">
+          <app-details-row [details]="getDetails(item)" />
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<div class="flex items-center justify-center gap-2 mt-6">
+  <mat-paginator
+    [length]="data().length"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[5, 10, 20, 50]"
+    (page)="changePage($event)"
+  ></mat-paginator>
+</div>

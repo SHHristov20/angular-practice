@@ -45,7 +45,6 @@
     <app-form-checkbox [title]="'Active'" [control]="form.controls['status']" />
   </div>
 
-  <!-- Buttons -->
   <div class="flex justify-end gap-3 pt-2">
     <button type="button" appSecondaryButton (click)="onCancel()">Cancel</button>
     <button type="submit" appPrimaryButton [disabled]="form.invalid">Submit</button>

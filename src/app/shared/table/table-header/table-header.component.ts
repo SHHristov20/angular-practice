@@ -7,15 +7,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [],
   templateUrl: './table-header.component.html',
 })
-export class TableHeaderComponent {
+export class TableHeaderComponent<T> {
   label = input.required<string>();
   sortable = input<boolean>(false);
   sortDirection: 'asc' | 'desc' = 'desc';
   filterable = input<boolean>(false);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  propertyName = input<string>('');
-  filterChange = output<{ property: string; value: string }>();
+  propertyName = input.required<keyof T>();
+  filterChange = output<{ property: keyof T; value: string }>();
 
   toggleSort() {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
