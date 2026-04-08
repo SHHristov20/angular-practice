@@ -6,6 +6,9 @@ import { BaseService } from '../shared/services/base.service';
   providedIn: 'root',
 })
 export class EmployeeService extends BaseService<Employee, NewEmployeeDto> {
+  public entityName = 'Employee';
+  public route = 'employees';
+
   constructor() {
     super(generateEmployees(100));
   }

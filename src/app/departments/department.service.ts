@@ -6,6 +6,9 @@ import { BaseService } from '../shared/services/base.service';
   providedIn: 'root',
 })
 export class DepartmentService extends BaseService<Department, NewDepartmentDto> {
+  public entityName = 'Department';
+  public route = 'departments';
+
   constructor() {
     super(mockDepartments);
   }

@@ -7,7 +7,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { filter, getDetails, sort } from '../../utils/object.utils';
 import { BaseService } from '../../services/base.service';
 import { DialogService } from '../../confirm-dialog/dialog.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DestroyRef } from '@angular/core';
 import { TableColumn } from './TableColumn';
 
@@ -27,7 +27,7 @@ export class GenericTableComponent<T extends { id: number; name: string; expande
   activatedRoute = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
   dialogService = inject(DialogService);
-  edit = output<T>();
+  router = inject(Router);
 
   ngOnInit() {
     this.data.set(this.baseService().getAll());
@@ -69,9 +69,8 @@ export class GenericTableComponent<T extends { id: number; name: string; expande
 
   onDelete(itemId: number) {
     if (!this.baseService().getById(itemId)) return;
-    // TODO
-    const title = 'Delete {}';
-    const message = `Are you sure you want to delete this {}?
+    const title = `Delete ${this.baseService().entityName}`;
+    const message = `Are you sure you want to delete this ${this.baseService().entityName}?
     ID: ${itemId}
     Name: ${this.baseService().getById(itemId)!.name!}`;
     this.dialogService.openDialog(title, message).subscribe((confirmed) => {
@@ -79,5 +78,9 @@ export class GenericTableComponent<T extends { id: number; name: string; expande
       this.baseService().delete(itemId);
       this.onFilterChange(this.currentFilters());
     });
+  }
+
+  onEdit(itemId: number) {
+    this.router.navigate([this.baseService().route, 'edit', itemId]);
   }
 }

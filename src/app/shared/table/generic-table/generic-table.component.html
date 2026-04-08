@@ -33,7 +33,7 @@
 
         <td class="px-6 py-4 text-right border-t">
           <app-actions-row
-            (edit)="edit.emit(item)"
+            (edit)="onEdit(item.id)"
             (delete)="onDelete(item.id)"
             (expand)="item.expanded = !item.expanded"
           ></app-actions-row>

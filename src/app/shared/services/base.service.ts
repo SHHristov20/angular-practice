@@ -5,6 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export abstract class BaseService<T extends { id: number }, Dto = Omit<T, 'id' | 'createdAt'>> {
   private readonly _items: T[] = [];
+  public abstract entityName: string;
+  public abstract route: string;
 
   constructor(items?: T[]) {
     if (items) {
