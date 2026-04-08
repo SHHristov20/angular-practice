@@ -17,5 +17,5 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 export class FormDatepickerComponent {
   label = input.required<string>();
   control = input.required<FormControl>();
-  errorMessage = input<string>('This field is required');
+  errorMessage = input<string>();
 }

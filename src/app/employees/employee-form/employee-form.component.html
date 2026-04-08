@@ -6,32 +6,28 @@
   <app-form-input
     [label]="'Name'"
     [control]="form.controls['name']"
-    [errorMessage]="'Name is required'"
   />
 
   <app-form-input
     [label]="'Email'"
     [control]="form.controls['email']"
-    [errorMessage]="'Valid email is required'"
+    [errorMessage]="'Valid email address is required'"
   />
 
   <app-form-select
     [label]="'Department'"
     [control]="form.controls['department']"
     [options]="departmentsSelectOptions"
-    [errorMessage]="'Department is required'"
   />
 
   <app-form-input
     [label]="'Role'"
     [control]="form.controls['role']"
-    [errorMessage]="'Role is required'"
   />
 
   <app-form-datepicker
     [label]="'Starting date'"
     [control]="form.controls['startDate']"
-    [errorMessage]="'Starting date is required'"
   />
 
   <app-form-input

@@ -6,25 +6,22 @@
   <app-form-input
     [label]="'Name'"
     [control]="form.controls['name']"
-    [errorMessage]="'Name is required'"
   />
 
   <app-form-textarea
     [label]="'Description'"
     [control]="form.controls['description']"
-    [errorMessage]="'Description is required'"
   />
 
   <app-form-input
     [label]="'Location'"
     [control]="form.controls['location']"
-    [errorMessage]="'Location is required'"
   />
 
   <app-form-input
     [label]="'Budget'"
     [control]="form.controls['budget']"
-    [errorMessage]="'Budget is required'"
+    [errorMessage]="'Budget must be a valid monetary amount'"
   />
 
   <div class="flex justify-end gap-3 pt-2">

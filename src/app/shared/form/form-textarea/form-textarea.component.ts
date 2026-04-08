@@ -15,5 +15,5 @@ import { MatInputModule } from '@angular/material/input';
 export class FormTextareaComponent {
   label = input.required<string>();
   control = input.required<FormControl>();
-  errorMessage = input<string>('This field is required');
+  errorMessage = input<string>();
 }

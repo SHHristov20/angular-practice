@@ -1,6 +1,5 @@
-import { Component, input, output, inject, signal } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { sort } from '../../utils/object.utils';
 @Component({
   selector: 'app-table-header-cell',
   standalone: true,

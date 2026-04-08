@@ -16,5 +16,5 @@ export class FormSelectComponent {
   label = input.required<string>();
   control = input.required<FormControl>();
   options = input.required<{ value: string; viewValue: string }[]>();
-  errorMessage = input<string>('This field is required');
+  errorMessage = input<string>();
 }
