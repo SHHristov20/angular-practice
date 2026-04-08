@@ -4,10 +4,16 @@
   <div class="flex items-center gap-2">
     @if (sortable()) {
       <button class="text-xs px-2 py-1 border rounded hover:bg-gray-200" (click)="toggleSort()">
-        @if (route.snapshot.queryParamMap.get('sortBy') === propertyName()) {
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        } @else {
-          <span class="text-gray-400">↕</span>
+        @switch (sortDirection) {
+          @case ('asc') {
+            ↑
+          }
+          @case ('desc') {
+            ↓
+          }
+          @default {
+            ↕
+          }
         }
       </button>
     }

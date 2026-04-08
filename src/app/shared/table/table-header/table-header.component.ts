@@ -1,6 +1,6 @@
-import { Component, input, output, inject } from '@angular/core';
+import { Component, input, output, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { sort } from '../../utils/object.utils';
 @Component({
   selector: 'app-table-header-cell',
   standalone: true,
@@ -10,17 +10,50 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class TableHeaderComponent<T> {
   label = input.required<string>();
   sortable = input<boolean>(false);
-  sortDirection: 'asc' | 'desc' = 'desc';
+  sortDirection: 'asc' | 'desc' | null = null;
   filterable = input<boolean>(false);
   router = inject(Router);
   route = inject(ActivatedRoute);
   propertyName = input.required<keyof T>();
   filterChange = output<{ property: keyof T; value: string }>();
+  sortCriteria: {
+    property: keyof T;
+    direction: 'asc' | 'desc';
+  }[] = [];
 
   toggleSort() {
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    const currentSort = this.route.snapshot.queryParamMap.get('sort');
+
+    this.sortCriteria = currentSort
+      ? currentSort.split(',').map((param) => {
+          const [property, direction] = param.split(':');
+          return { property: property as keyof T, direction: direction as 'asc' | 'desc' };
+        })
+      : [];
+
+    const nextDirection =
+      this.sortDirection === null ? 'asc' : this.sortDirection === 'asc' ? 'desc' : null;
+
+    this.sortDirection = nextDirection;
+
+    const property = this.propertyName();
+    const index = this.sortCriteria.findIndex((c) => c.property === property);
+
+    if (nextDirection) {
+      if (index >= 0) {
+        this.sortCriteria[index] = { property, direction: nextDirection };
+      } else {
+        this.sortCriteria = [...this.sortCriteria, { property, direction: nextDirection }];
+      }
+    } else if (index >= 0) {
+      this.sortCriteria = this.sortCriteria.filter((c) => c.property !== property);
+    }
+
+    const sort = this.sortCriteria.map((c) => `${String(c.property)}:${c.direction}`).join(',');
+
     this.router.navigate([], {
-      queryParams: { sortBy: this.propertyName(), sortDirection: this.sortDirection },
+      queryParams: { sort: sort || null },
+      queryParamsHandling: 'merge',
     });
   }
 

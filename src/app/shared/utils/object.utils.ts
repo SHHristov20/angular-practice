@@ -19,6 +19,33 @@ function sort<T>(items: T[], sortBy: keyof T, direction: 'asc' | 'desc'): T[] {
   });
 }
 
+function sortMultiple<T>(
+  items: T[],
+  criteria: { property: keyof T; direction: 'asc' | 'desc' }[],
+): T[] {
+  return items.sort((a, b) => {
+    for (const { property, direction } of criteria) {
+      const left = a[property];
+      const right = b[property];
+
+      let result = 0;
+
+      if (typeof left === 'number' && typeof right === 'number') {
+        result = left - right;
+      } else if (left instanceof Date && right instanceof Date) {
+        result = left.getTime() - right.getTime();
+      } else {
+        result = String(left).localeCompare(String(right));
+      }
+
+      if (result !== 0) {
+        return direction === 'asc' ? result : -result;
+      }
+    }
+    return 0;
+  });
+}
+
 function filter<T>(items: T[], filter: { property: keyof T; value: string }): T[] {
   return items.filter((item) => {
     const itemValue = String(item[filter.property]).toLowerCase();
@@ -42,4 +69,4 @@ function getDetails<T>(item: T, excluded?: (keyof T)[]): { label: string; value:
   return details;
 }
 
-export { sort, filter, getDetails };
+export { sort, sortMultiple, filter, getDetails };

@@ -4,7 +4,7 @@ import { TableHeaderComponent } from '../table-header/table-header.component';
 import { DetailsRowComponent } from '../details-row/details-row.component';
 import { ActionsRowComponent } from '../actions-row/actions-row.component';
 import { PageEvent } from '@angular/material/paginator';
-import { filter, getDetails, sort } from '../../utils/object.utils';
+import { filter, getDetails, sort, sortMultiple } from '../../utils/object.utils';
 import { BaseService } from '../../services/base.service';
 import { DialogService } from '../../confirm-dialog/dialog.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,10 +36,15 @@ export class GenericTableComponent<T extends { id: number; name: string; expande
 
   setupParamListener() {
     const subscription = this.activatedRoute.queryParams.subscribe((params) => {
-      const sortDirection = params['sortDirection'] || 'asc';
-      const sortBy = params['sortBy'];
+      const sortParam = params['sort'];
+      const criteria = sortParam
+        ? sortParam.split(',').map((param: string) => {
+            const [property, direction] = param.split(':');
+            return { property: property as keyof T, direction: direction as 'asc' | 'desc' };
+          })
+        : [];
 
-      this.data.set(sort<T>(this.baseService().getAll(), sortBy, sortDirection));
+      this.data.set(sortMultiple<T>(this.baseService().getAll(), criteria));
     });
 
     this.destroyRef.onDestroy(() => {
